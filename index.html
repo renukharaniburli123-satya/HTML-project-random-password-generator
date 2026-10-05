@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Random Password Generator</title>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #062fe4, #7f05fa);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-image: url(generator.jpg);
+      background-size: cover;
+    }
+
+    .container {
+      background: white;
+      padding: 35px;
+      border-radius: 15px;
+      width: 350px;
+      text-align: center;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    }
+
+    h1 {
+      color: #333;
+    }
+
+    .password-box {
+      display: flex;
+      margin: 25px 0;
+    }
+
+    #password {
+      flex: 1;
+      padding: 12px;
+      font-size: 16px;
+      border: 1px solid #ccc;
+      border-radius: 8px 0 0 8px;
+    }
+
+    .copy-btn {
+      border: none;
+      background: #555;
+      color: white;
+      padding: 0 15px;
+      cursor: pointer;
+      border-radius: 0 8px 8px 0;
+    }
+
+    .options {
+      text-align: left;
+      margin-bottom: 20px;
+    }
+
+    .options label {
+      display: block;
+      margin: 10px 0;
+    }
+
+    button.generate {
+      width: 100%;
+      padding: 12px;
+      background: #06e320;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 17px;
+      cursor: pointer;
+    }
+
+    button.generate:hover {
+      background: #5568d8;
+    }
+
+    #message {
+      margin-top: 15px;
+      color: green;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="container">
+    <h1>🔐 Password Generator</h1>
+
+    <div class="password-box">
+      <input type="text" id="password" readonly>
+      <button class="copy-btn" onclick="copyPassword()">Copy</button>
+    </div>
+
+    <div class="options">
+      <label>
+        Password Length:
+        <input type="number" id="length" value="12" min="4" max="50">
+      </label>
+
+      <label>
+        <input type="checkbox" id="uppercase" checked>
+        Include Uppercase
+      </label>
+
+      <label>
+        <input type="checkbox" id="numbers" checked>
+        Include Numbers
+      </label>
+
+      <label>
+        <input type="checkbox" id="symbols" checked>
+        Include Symbols
+      </label>
+    </div>
+
+    <button class="generate" onclick="generatePassword()">
+      Generate Password
+    </button>
+
+    <p id="message"></p>
+  </div>
+
+  <script>
+    function generatePassword() {
+      const length = Number(document.getElementById("length").value);
+      const uppercase = document.getElementById("uppercase").checked;
+      const numbers = document.getElementById("numbers").checked;
+      const symbols = document.getElementById("symbols").checked;
+
+      let characters = "abcdefghijklmnopqrstuvwxyz";
+
+      if (uppercase) {
+        characters += "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+      }
+
+      if (numbers) {
+        characters += "0123456789";
+      }
+
+      if (symbols) {
+        characters += "!@#$%^&*()_+-=[]{}|;:,.<>?";
+      }
+
+      let password = "";
+
+      for (let i = 0; i < length; i++) {
+        const randomIndex = Math.floor(Math.random() * characters.length);
+        password += characters[randomIndex];
+      }
+
+      document.getElementById("password").value = password;
+      document.getElementById("message").textContent = "";
+    }
+
+    function copyPassword() {
+      const password = document.getElementById("password");
+
+      if (!password.value) {
+        document.getElementById("message").textContent =
+          "Generate a password first!";
+        return;
+      }
+
+      navigator.clipboard.writeText(password.value);
+
+      document.getElementById("message").textContent =
+        "Password copied! ✅";
+    }
+
+    // Generate a password when the page loads
+    generatePassword();
+  </script>
+
+</body>
+</html>
